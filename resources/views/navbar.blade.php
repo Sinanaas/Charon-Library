@@ -11,7 +11,7 @@
                         Manage Books
                     </a>
                     <ul class="dropdown-menu">
-                        <li><a class="dropdown-item" href="#">View All Books</a></li>
+                        <li><a class="dropdown-item" href="{{ route('books') }}">View All Books</a></li>
                         <li><a class="dropdown-item" href="#">Create Book</a></li>
                     </ul>
                 </li>

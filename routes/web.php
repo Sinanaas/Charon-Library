@@ -35,3 +35,8 @@ Route::delete('/publishers/{id}', [PublisherController::class, 'deletePublisher'
 Route::put('/publishers/{id}', [PublisherController::class, 'updatePublisher'])->name('update_publisher');
 Route::get('/publishers', [PublisherController::class, 'getAllPublishers'])->name('publishers');
 
+Route::get('/books', [BookController::class, 'getAllBooks'])->name('books');
+Route::delete('/books/{id}', [BookController::class, 'deleteBook'])->name('delete_book');
+Route::get('/books/{id}', [BookController::class, 'getBook'])->name('get_book');
+Route::put('/books/{id}', [BookController::class, 'updateBook'])->name('update_book');
+
