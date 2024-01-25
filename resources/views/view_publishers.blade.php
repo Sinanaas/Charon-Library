@@ -18,7 +18,9 @@
             <tr>
                 <th>ID</th>
                 <th>Publisher Name</th>
-                <th>Action</th>
+                @if(Auth::user()->role == 'admins')
+                    <th>Action</th>
+                @endif
             </tr>
             </thead>
             @foreach($publishers as $publisher)
@@ -26,14 +28,16 @@
                 <tr>
                     <td>{{ $publisher->id }}</td>
                     <td>{{ $publisher->name }}</td>
-                    <td class="d-flex gap-2">
-                        <a class="btn btn-primary" href="{{ route('get_publisher', ['id' => $publisher->id]) }}">Update</a>
-                        <form action="{{ route('delete_publisher', ['id' => $publisher->id]) }}" method="post" onsubmit="return confirm('Are you sure you want to delete this publisher?');">
-                            @csrf
-                            @method('DELETE')
-                            <input class="btn btn-danger" type="submit" value="Delete">
-                        </form>
-                    </td>
+                    @if(Auth::user()->role == 'admins')
+                        <td class="d-flex gap-2">
+                            <a class="btn btn-primary" href="{{ route('get_publisher', ['id' => $publisher->id]) }}">Update</a>
+                            <form action="{{ route('delete_publisher', ['id' => $publisher->id]) }}" method="post" onsubmit="return confirm('Are you sure you want to delete this publisher?');">
+                                @csrf
+                                @method('DELETE')
+                                <input class="btn btn-danger" type="submit" value="Delete">
+                            </form>
+                        </td>
+                    @endif
                 </tr>
                 </tbody>
             @endforeach

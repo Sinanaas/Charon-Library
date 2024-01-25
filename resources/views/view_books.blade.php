@@ -24,7 +24,9 @@
                 <th>Publisher</th>
                 <th>Description</th>
                 <th>Image</th>
-                <th>Action</th>
+                @if(Auth::user()->role == 'admin')
+                    <th>Action</th>
+                @endif
             </tr>
             </thead>
             @foreach($books as $book)
@@ -38,14 +40,18 @@
                     <td>{{ $book->publisher->name }}</td>
                     <td>{{ $book->description }}</td>
                     <td><img src="images/{{ $book->image }}" alt=""></td>
-                    <td class="d-flex gap-2">
-                        <a class="btn btn-primary" href="{{ route('get_book', ['id' => $book->id]) }}">Update</a>
-                        <form action="{{ route('delete_book', ['id' => $book->id]) }}" method="post" onsubmit="return confirm('Are you sure you want to delete this book?');">
-                            @csrf
-                            @method('DELETE')
-                            <input class="btn btn-danger" type="submit" value="Delete">
-                        </form>
-                    </td>
+                    @if(Auth::user()->role == 'admin')
+                        <td class=" gap-2" style="min-height: 100%">
+                            <div class="d-flex gap-2">
+                                <a class="btn btn-primary" href="{{ route('get_book', ['id' => $book->id]) }}">Update</a>
+                                <form action="{{ route('delete_book', ['id' => $book->id]) }}" method="post" onsubmit="return confirm('Are you sure you want to delete this book?');">
+                                    @csrf
+                                    @method('DELETE')
+                                    <input class="btn btn-danger" type="submit" value="Delete">
+                                </form>
+                            </div>
+                        </td>
+                    @endif
                 </tr>
                 </tbody>
             @endforeach

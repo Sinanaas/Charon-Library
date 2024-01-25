@@ -12,7 +12,9 @@
                     </a>
                     <ul class="dropdown-menu">
                         <li><a class="dropdown-item" href="{{ route('books') }}">View All Books</a></li>
-                        <li><a class="dropdown-item" href="#">Create Book</a></li>
+                        @if(auth()->user()->role == 'admin')
+                            <li><a class="dropdown-item" href="{{ route('create_book') }}">Create Book</a></li>
+                        @endif
                     </ul>
                 </li>
                 <li class="nav-item dropdown">
@@ -21,7 +23,9 @@
                     </a>
                     <ul class="dropdown-menu">
                         <li><a class="dropdown-item" href="{{ route('publishers') }}">View All Publishers</a></li>
-                        <li><a class="dropdown-item" href="{{ route('create_publisher') }}">Create Publisher</a></li>
+                        @if(auth()->user()->role == 'admin')
+                            <li><a class="dropdown-item" href="{{ route('create_publisher') }}">Create Publisher</a></li>
+                        @endif
                     </ul>
                 </li>
                 <li class="nav-item dropdown">
@@ -30,14 +34,21 @@
                     </a>
                     <ul class="dropdown-menu">
                         <li><a class="dropdown-item" href="{{ route('authors') }}">View All Authors</a></li>
-                        <li><a class="dropdown-item" href="{{ route('create_author') }}">Create Author</a></li>
+                        @if(auth()->user()->role == 'admin')
+                            <li><a class="dropdown-item" href="{{ route('create_author') }}">Create Author</a></li>
+                        @endif
                     </ul>
                 </li>
             </ul>
-            <form class="d-flex" role="search">
-                <input class="form-control me-2" type="search" placeholder="Search books" aria-label="Search">
-                <button class="btn btn-outline-light" type="submit">Search</button>
-            </form>
+            <div class="d-flex gap-5">
+                <form class="d-flex" role="search" action="{{ route('search_books') }}" method="get">
+                    @csrf
+                    @method('GET')
+                    <input class="form-control me-2" type="search" name="search" placeholder="Search books" aria-label="Search">
+                    <button class="btn btn-outline-light" type="submit">Search</button>
+                </form>
+                <a class="lead text-white m-l-2"  href="{{ route('logout') }}">Logout</a>
+            </div>
         </div>
     </div>
 </nav>

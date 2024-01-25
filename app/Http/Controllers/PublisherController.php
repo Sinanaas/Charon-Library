@@ -52,4 +52,11 @@ class PublisherController extends Controller
     public function createPublisher() {
         return view('create_publisher');
     }
+
+    public function addPublisher(Request $request) {
+        $publisher = new Publisher();
+        $publisher->name = $request->publisher_name;
+        $publisher->save();
+        return redirect()->route('publishers')->with('success', 'Publisher added successfully.');
+    }
 }
