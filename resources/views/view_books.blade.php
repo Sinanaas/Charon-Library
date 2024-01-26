@@ -39,7 +39,7 @@
                     <td>{{ $book->author->name }}</td>
                     <td>{{ $book->publisher->name }}</td>
                     <td>{{ $book->description }}</td>
-                    <td><img src="images/{{ $book->image }}" alt=""></td>
+                    <td><img src="../storage/images/{{ $book->image }}" alt="" style="width: 100%;"></td>
                     @if(Auth::user()->role == 'admin')
                         <td class=" gap-2" style="min-height: 100%">
                             <div class="d-flex gap-2">

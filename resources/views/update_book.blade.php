@@ -1,14 +1,21 @@
 @extends('layout')
 @section('content')
     <div class="container">
-        <h1>Update Book</h1>
-        <form action="{{ route('update_book', ['id' => $book->id]) }}" method="post">
+        @if(auth()->user()->role == 'admin')
+            <h1>Update Book</h1>
+        @endif
+        @if(auth()->user()->role == 'regular')
+            <h1>Book</h1>
+        @endif
+        <form action="{{ route('update_book', ['id' => $book->id]) }}" method="post" enctype="multipart/form-data">
             @csrf
             @method('PUT')
             <div class="d-flex gap-4">
                 <div class="w-25 d-flex flex-column gap-2">
-                    <img class="w-100" src="{{ asset('images/' . $image_url) }}" alt="">
-                    <input class="form-control" id="image" name="image" type="file">
+                    <img class="w-100" src="{{ asset('../storage/images/' . $image_url) }}" alt="">
+                    @if(auth()->user()->role == 'admin')
+                        <input class="form-control" id="image" name="image" type="file">
+                    @endif
                 </div>
                 <div class="w-50 mb-3 d-flex flex-column gap-2">
                     <label for="id">ID</label>

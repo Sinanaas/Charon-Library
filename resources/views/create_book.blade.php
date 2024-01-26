@@ -2,7 +2,7 @@
 @section('content')
     <div class="container">
         <h1>Create Book</h1>
-        <form action="{{ route('add_book') }}" method="post">
+        <form action="{{ route('add_book') }}" method="post" enctype="multipart/form-data">
             @csrf
             @method('POST')
             <div class="w-50 mb-3 d-flex flex-column gap-2">

@@ -20,11 +20,9 @@ class AuthorController extends Controller
         if ($author) {
             $author->name = $request->author_name;
             $author->save();
-            Session::flash('success', 'Author updated successfully.');
-            return redirect()->route('authors');
+            return redirect()->route('authors')->with('success', 'Author updated successfully.');
         } else {
-            Session::flash('error', 'Author not found.');
-            return redirect()->route('authors');
+            return redirect()->route('authors')->with('error', 'Author not found.');
         }
     }
 
@@ -45,8 +43,7 @@ class AuthorController extends Controller
             $author->delete();
             return redirect()->route('authors')->with('success', 'Author deleted successfully.');
         } else {
-            Session::flash('error', 'Author not found.');
-            return redirect()->route('authors');
+            return redirect()->route('authors')->with('error', 'Author not found.');
         }
     }
 

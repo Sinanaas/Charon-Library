@@ -20,9 +20,12 @@ use Illuminate\Support\Facades\Route;
 //Route::get('/', function () {
 //    return view('home', [BookController::class, 'getAllBooks']);
 //});
-Route::get('/books', [BookController::class, 'getAllBooks'])->name('books');
-Route::get('/publishers', [PublisherController::class, 'getAllPublishers'])->name('publishers');
-Route::get('/authors', [AuthorController::class, 'getAllAuthors'])->name('authors');
+Route::middleware('auth')->group(function() {
+    Route::get('/books', [BookController::class, 'getAllBooks'])->name('books');
+    Route::get('/publishers', [PublisherController::class, 'getAllPublishers'])->name('publishers');
+    Route::get('/authors', [AuthorController::class, 'getAllAuthors'])->name('authors');
+});
+
 Route::middleware(['auth', 'isAdmin'])->group(function() {
     Route::get('/authors/create', [AuthorController::class, 'createAuthor'])->name('create_author');
     Route::get('/authors/{id}', [AuthorController::class, 'getAuthor'])->name('get_author');
@@ -41,10 +44,14 @@ Route::middleware(['auth', 'isAdmin'])->group(function() {
     Route::put('/books/{id}', [BookController::class, 'updateBook'])->name('update_book');
     Route::post('/books', [BookController::class, 'addBook'])->name('add_book');
 });
-Route::get('/books/{id}', [BookController::class, 'getBook'])->name('get_book');
 
-Route::get('/', [AuthController::class, 'home'])->name('home');
-
+Route::middleware('auth')->group(function() {
+    Route::get('/books/{id}', [BookController::class, 'getBook'])->name('get_book');
+    Route::get('/logout', [AuthController::class, 'logout'])->name('logout');
+    Route::get('/home', [AuthController::class, 'regularHome'])->name('regular_home');
+    Route::get('/search', [BookController::class, 'searchBooks'])->name('search_books');
+    Route::get('/', [AuthController::class, 'home'])->name('home');
+});
 
 Route::get('/login', [AuthController::class, 'login'])->name('login');
 Route::post('/login', [AuthController::class, 'checkLogin'])->name('check_login');
@@ -52,9 +59,5 @@ Route::post('/login', [AuthController::class, 'checkLogin'])->name('check_login'
 Route::get('/register', [AuthController::class, 'register'])->name('register');
 Route::post('/register', [AuthController::class, 'registerUser'])->name('register_user');
 
-Route::get('/logout', [AuthController::class, 'logout'])->name('logout');
 
-Route::get('/home', [AuthController::class, 'regularHome'])->name('regular_home');
-
-Route::get('/search', [BookController::class, 'searchBooks'])->name('search_books');
 

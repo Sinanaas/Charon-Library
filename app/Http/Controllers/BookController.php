@@ -24,8 +24,7 @@ class BookController extends Controller
             $book->delete();
             return redirect()->route('books')->with('success', 'Book deleted successfully!');
         } else {
-            Session::flash('error', 'Book is not exist!');
-            return redirect()->route('books');
+            return redirect()->route('books')->with('error', 'Book does not exists!');
         }
     }
 
@@ -46,12 +45,16 @@ class BookController extends Controller
             $book->description = $request->description;
             $book->publisher_id = $request->publisher;
             $book->author_id = $request->author;
-            if ($request->hasFile('image')) {
-                $image = $request->file('image');
-                $name = $image->getClientOriginalName();
-                $destinationPath = public_path('/images');
-                $image->move($destinationPath, $name);
-                $book->image = $name;
+//            dd($request->all());
+            if ($request->image) {
+                if ($book->image != null) {
+                    Storage::delete('public/images/' . $book->image);
+                }
+                $file = $request->file('image');
+                $fileName = uniqid() . '_' . $file->getClientOriginalName();
+                $subDirectory = 'images';
+                $file->storeAs($subDirectory, $fileName, 'public');
+                $book->image = $fileName;
             }
 
             $book->save();
@@ -79,28 +82,28 @@ class BookController extends Controller
 
         $book = new Book();
 
-        if ($request->hasFile('image')) {
-//            dd($request->all());
-            $file = $request->file('image');
-            $fileName = uniqid() . '_' . $file->getClientOriginalName();
-            $subDirectory = 'images';
-            $path = $file->storeAs($subDirectory, $fileName, 'public');
-            Storage::disk('local')->put('images', $file);
-            $book->image = $path;
-        }
+//        if ($request->hasFile('image')) {
+//        }
         $book->isbn = $request->isbn;
         $book->title = $request->title;
         $book->description = $request->description;
         $book->publisher_id = $request->publisher;
         $book->author_id = $request->author;
         $book->stock = $request->stock;
+
+        $file = $request->file('image');
+        $fileName = uniqid() . '_' . $file->getClientOriginalName();
+        $subDirectory = 'images';
+        $file->storeAs($subDirectory, $fileName, 'public');
+        $book->image = $fileName;
+
         $book->save();
         return redirect()->route('books')->with('success', 'Book added successfully!');
     }
 
     public function searchBooks(Request $request) {
 //        dd($request);
-        $books = Book::where('title', 'like', '%' . $request->input('search') . '%')->get();
+        $books = Book::where('title', 'like', '%' . $request->search . '%')->paginate(1);
         return view('search', ['books' => $books]);
     }
 }
